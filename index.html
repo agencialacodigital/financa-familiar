@@ -905,7 +905,7 @@
 <!-- TOP BAR COUNTDOWN -->
 <div class="topbar">
   <div class="topbar-label">Próxima Aula ao Vivo</div>
-  <div class="topbar-title">TODA TERÇA-FEIRA, ÀS 19H</div>
+  <div class="topbar-title" id="topbar-title">CARREGANDO...</div>
   <div class="countdown">
     <div class="cd-block"><span class="cd-number" id="cd-days">00</span><span class="cd-label">Dias</span></div>
     <span class="cd-sep">:</span>
@@ -950,16 +950,16 @@
   <div class="hero-content">
     <div class="hero-badge">
       <span class="hero-badge-dot"></span>
-      Aula Gratuita · Toda Terça-feira às 19h
+      <span id="hero-badge-text">Carregando...</span>
     </div>
     <h1 class="hero-title">Organize suas<br><span>finanças.</span><br>Transforme<br>sua vida.</h1>
-    <p class="hero-subtitle-line">Participe da próxima aula ao vivo</p>
+    <p class="hero-subtitle-line" id="hero-subtitle">Carregando...</p>
     <p class="hero-text">Orientações práticas para organizar o dinheiro da sua família, reduzir gastos e começar a construir um caminho para sair das dívidas.</p>
     <p class="hero-text" style="font-size:15px; color: var(--gray);">Não importa quanto você ganha hoje. O primeiro passo para mudar sua vida financeira é aprender a tomar decisões melhores com o dinheiro que já passa pelas suas mãos.</p>
     <div class="hero-meta">
       <div class="hero-meta-item">
         <svg class="hero-meta-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-        Toda terça-feira, às 19h
+        <span id="hero-meta-data">Carregando...</span>
       </div>
       <div class="hero-meta-item">
         <svg class="hero-meta-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
@@ -1185,7 +1185,7 @@
 <section class="final-cta">
   <div class="final-cta-bg"></div>
   <div class="final-cta-inner">
-    <div class="final-cta-label">Toda Terça-Feira, às 19h</div>
+    <div class="final-cta-label" id="cta-label">Carregando...</div>
     <h2 class="final-cta-title">Sua vida financeira não vai mudar apenas porque um novo mês começou.</h2>
     <p class="final-cta-text">Ela começa a mudar quando você entende sua realidade, organiza suas decisões e dá o primeiro passo. Participe da próxima aula gratuita do Finança Familiar.</p>
     <button class="btn-dark" onclick="openModal()">INSCREVA-SE GRATUITAMENTE</button>
@@ -1213,7 +1213,7 @@
       <h2 class="modal-title" id="modalTitle">Inscreva-se gratuitamente</h2>
       <p class="modal-subtitle">
         Preencha seus dados para participar da próxima aula do Finança Familiar.<br>
-        <span>Toda terça-feira, às 19h · Online e ao vivo</span>
+        <span id="modal-data-texto">Carregando...</span>
       </p>
 
       <div class="form-field">
@@ -1242,25 +1242,83 @@
 </div>
 
 <script>
-  // ── COUNTDOWN ──
-  function getNextTuesday19h() {
+  // ── PRÓXIMA AULA (Terça = 2, Quinta = 4) às 19h ──
+  const DIAS_AULA = [2, 4]; // 0=Dom,1=Seg,2=Ter,3=Qua,4=Qui,5=Sex,6=Sab
+  const HORA_AULA = 19;
+
+  const NOME_DIA = {
+    2: 'Terça-feira',
+    4: 'Quinta-feira'
+  };
+
+  function getProximaAula() {
     const now = new Date();
-    const target = new Date(now);
-    // day 2 = Tuesday (0=Sun, 1=Mon, 2=Tue)
-    const day = target.getDay();
-    let daysUntilTue = (2 - day + 7) % 7;
-    target.setDate(target.getDate() + daysUntilTue);
-    target.setHours(19, 0, 0, 0);
-    // If it's already past 19h on Tuesday, go to next week
-    if (target <= now) {
-      target.setDate(target.getDate() + 7);
+    let melhor = null;
+
+    for (const dia of DIAS_AULA) {
+      const target = new Date(now);
+      let diff = (dia - target.getDay() + 7) % 7;
+      if (diff === 0) diff = 0; // mesmo dia, verificar hora abaixo
+      target.setDate(target.getDate() + diff);
+      target.setHours(HORA_AULA, 0, 0, 0);
+      // se já passou a hora hoje, pular para próxima ocorrência desse dia
+      if (target <= now) {
+        target.setDate(target.getDate() + 7);
+      }
+      if (!melhor || target < melhor) melhor = target;
     }
-    return target;
+    return melhor;
+  }
+
+  function formatarDataAula(date) {
+    const dia = date.getDay();
+    const nomeDia = NOME_DIA[dia] || '';
+    const dd = String(date.getDate()).padStart(2, '0');
+    const mm = String(date.getMonth() + 1).padStart(2, '0');
+    return `${nomeDia}, ${dd}/${mm} às 19h`;
+  }
+
+  function formatarDataCurta(date) {
+    const dia = date.getDay();
+    const nomeDia = NOME_DIA[dia] || '';
+    const dd = String(date.getDate()).padStart(2, '0');
+    const mm = String(date.getMonth() + 1).padStart(2, '0');
+    return `${nomeDia}, ${dd}/${mm}`;
+  }
+
+  function atualizarTextosDaAula() {
+    const proxima = getProximaAula();
+    const textoCompleto = formatarDataAula(proxima);
+    const textoCurto = formatarDataCurta(proxima);
+
+    // Topbar
+    const topbarTitle = document.getElementById('topbar-title');
+    if (topbarTitle) topbarTitle.textContent = textoCompleto.toUpperCase();
+
+    // Hero badge
+    const heroBadge = document.getElementById('hero-badge-text');
+    if (heroBadge) heroBadge.textContent = `Aula Gratuita · ${textoCompleto}`;
+
+    // Hero subtitle
+    const heroSub = document.getElementById('hero-subtitle');
+    if (heroSub) heroSub.textContent = `Participe da aula ao vivo — ${textoCompleto}`;
+
+    // Hero meta item data
+    const heroMeta = document.getElementById('hero-meta-data');
+    if (heroMeta) heroMeta.textContent = textoCompleto;
+
+    // Modal subtitle
+    const modalSub = document.getElementById('modal-data-texto');
+    if (modalSub) modalSub.innerHTML = `<span>${textoCompleto} · Online e ao vivo</span>`;
+
+    // Final CTA label
+    const ctaLabel = document.getElementById('cta-label');
+    if (ctaLabel) ctaLabel.textContent = textoCompleto.toUpperCase();
   }
 
   function updateCountdown() {
     const now = new Date();
-    const target = getNextTuesday19h();
+    const target = getProximaAula();
     let diff = Math.max(0, target - now);
 
     const days    = Math.floor(diff / (1000 * 60 * 60 * 24));
@@ -1277,8 +1335,9 @@
     document.getElementById('cd-seconds').textContent = String(seconds).padStart(2,'0');
   }
 
+  atualizarTextosDaAula();
   updateCountdown();
-  setInterval(updateCountdown, 1000);
+  setInterval(() => { updateCountdown(); atualizarTextosDaAula(); }, 1000);
 
   // ── MODAL ──
   function openModal() {

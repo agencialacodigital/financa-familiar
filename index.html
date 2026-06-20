@@ -37,9 +37,6 @@
     color: var(--black);
     text-align: center;
     padding: 14px 20px;
-    position: sticky;
-    top: 0;
-    z-index: 100;
     box-shadow: 0 2px 20px rgba(245,197,24,0.4);
   }
   .topbar-label {
@@ -900,6 +897,23 @@
     .hero-badge-dot { animation: none; }
   }
 </style>
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '1670992540437738');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=1670992540437738&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Meta Pixel Code -->
 </head>
 <body>
 
@@ -954,7 +968,7 @@
       <span id="hero-badge-text">Carregando...</span>
     </div>
     <h1 class="hero-title">Comece a sair<br><span>das dívidas</span><br>e retome o controle.</h1>
-    <p class="hero-subtitle-line" id="hero-subtitle">Carregando...</p>
+    <p class="hero-subtitle-line" id="hero-subtitle-line1">Participe da aula ao vivo</p><p class="hero-subtitle-line" id="hero-subtitle-line2" style="color:var(--yellow);font-size:clamp(18px,2.2vw,30px);">Carregando...</p>
     <p class="hero-text">Orientações práticas para organizar o dinheiro da sua família, reduzir gastos e começar a construir um caminho para sair das dívidas.</p>
     <p class="hero-text" style="font-size:15px; color: var(--gray);">Não importa quanto você ganha hoje. O primeiro passo para mudar sua vida financeira é aprender a tomar decisões melhores com o dinheiro que já passa pelas suas mãos.</p>
     <div class="hero-meta">
@@ -964,7 +978,7 @@
       </div>
       <div class="hero-meta-item">
         <svg class="hero-meta-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-        2 aulas por semana — gratuitas
+        2 aulas por semana
       </div>
       <div class="hero-meta-item">
         <svg class="hero-meta-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
@@ -1305,9 +1319,9 @@
     const heroBadge = document.getElementById('hero-badge-text');
     if (heroBadge) heroBadge.textContent = `Aula Gratuita · ${textoCompleto}`;
 
-    // Hero subtitle
-    const heroSub = document.getElementById('hero-subtitle');
-    if (heroSub) heroSub.textContent = `Participe da aula ao vivo — ${textoCompleto}`;
+    // Hero subtitle linha 2
+    const heroSub2 = document.getElementById('hero-subtitle-line2');
+    if (heroSub2) heroSub2.textContent = textoCompleto;
 
     // Hero meta item data
     const heroMeta = document.getElementById('hero-meta-data');
@@ -1372,6 +1386,9 @@
     }
     document.getElementById('modalForm').style.display = 'none';
     document.getElementById('modalSuccess').style.display = 'block';
+    setTimeout(() => {
+      window.location.href = 'https://chat.whatsapp.com/H8z3fOXlmyBFmtC4pFcxCk';
+    }, 1500);
   }
 
   // WhatsApp mask

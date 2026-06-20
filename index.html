@@ -914,6 +914,7 @@ fbq('track', 'PageView');
 src="https://www.facebook.com/tr?id=1670992540437738&ev=PageView&noscript=1"
 /></noscript>
 <!-- End Meta Pixel Code -->
+<script src="https://omnpvrixdqtsdzmlrclj.supabase.co/functions/v1/precheckout-script/8a4c4221-f9bf-4d46-a699-1a9753d8a1e5/1db73e5a-8cf0-4dfc-ad48-d494f5e1ca05" data-product="Página de Captura - Aula Semanal" data-product-id="aula-semanal"></script>
 </head>
 <body>
 
@@ -1238,15 +1239,15 @@ src="https://www.facebook.com/tr?id=1670992540437738&ev=PageView&noscript=1"
 
       <div class="form-field">
         <label for="field-name">Nome completo</label>
-        <input type="text" id="field-name" placeholder="Seu nome completo" autocomplete="name">
+        <input type="text" id="field-name" name="name" data-checkout="name" placeholder="Seu nome completo" autocomplete="name">
       </div>
       <div class="form-field">
         <label for="field-email">E-mail</label>
-        <input type="email" id="field-email" placeholder="seu@email.com" autocomplete="email">
+        <input type="email" id="field-email" name="email" data-checkout="email" placeholder="seu@email.com" autocomplete="email">
       </div>
       <div class="form-field">
         <label for="field-whatsapp">WhatsApp</label>
-        <input type="tel" id="field-whatsapp" placeholder="(00) 00000-0000" autocomplete="tel">
+        <input type="tel" id="field-whatsapp" name="phone" data-checkout="phone" placeholder="(00) 00000-0000" autocomplete="tel">
       </div>
 
       <button class="modal-btn" onclick="submitForm()">CONFIRMAR MINHA INSCRIÇÃO</button>

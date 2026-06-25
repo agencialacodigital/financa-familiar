@@ -1385,6 +1385,14 @@ src="https://www.facebook.com/tr?id=1670992540437738&ev=PageView&noscript=1"
       alert('Por favor, preencha todos os campos para confirmar sua inscrição.');
       return;
     }
+    // Dispara evento Lead no Meta Pixel
+    if (typeof fbq !== 'undefined') {
+      fbq('track', 'Lead', {
+        content_name: 'Aula Semanal - Finança Familiar',
+        content_category: 'Educação Financeira'
+      });
+    }
+
     document.getElementById('modalForm').style.display = 'none';
     document.getElementById('modalSuccess').style.display = 'block';
     setTimeout(() => {
